@@ -259,8 +259,6 @@ class SidechainState private[horizen] (stateStorage: SidechainStateStorage,
     if (!tx.isInstanceOf[MC2SCAggregatedTransaction]) {
 
       if (tx.isInstanceOf[OpenStakeTransaction]) {
-        if (!params.restrictForgers)
-          throw new Exception("OpenStakeTransactions are not allowed with restrictForgers=false!")
         if (isForgingOpen())
           throw new Exception("OpenStakeTransactions are not allowed because the forger operation has already been opened!")
         val openStakeTransaction = tx.asInstanceOf[OpenStakeTransaction]
@@ -316,7 +314,7 @@ class SidechainState private[horizen] (stateStorage: SidechainStateStorage,
       newBoxes
         .filter(box => box.isInstanceOf[ForgerBox])
         .foreach(forgerBox => {
-          if (params.restrictForgers && !isForgerOpen) {
+          if (!isForgerOpen) {
             val vrfPublicKey: VrfPublicKey = forgerBox.vrfPubKey()
             val blockSignProposition: PublicKey25519Proposition = forgerBox.blockSignProposition()
             if (!params.allowedForgersList.contains((blockSignProposition, vrfPublicKey))) {
