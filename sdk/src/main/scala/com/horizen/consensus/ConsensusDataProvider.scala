@@ -24,18 +24,13 @@ trait ConsensusDataProvider {
   } =>
 
   def getStakeConsensusEpochInfo(blockTimestamp: Block.Timestamp, parentBlockId: ModifierId): Option[StakeConsensusEpochInfo] = {
-    consensusDataStorage.getStakeConsensusEpochInfo(
-      blockIdToEpochId(getLastBlockIdOfPrePreviousEpochs(blockTimestamp, parentBlockId)))
-  }
-
-  def getLastBlockIdOfPrePreviousEpochs(blockTimestamp: Block.Timestamp, parentBlockId: ModifierId): ModifierId = {
     if (isGenesisBlock(blockTimestamp, parentBlockId)) {
-      params.sidechainGenesisBlockId
+      consensusDataStorage.getStakeConsensusEpochInfo(blockIdToEpochId(params.sidechainGenesisBlockId))
     }
     else {
       val lastBlockInPreviousEpoch = getLastBlockInPreviousConsensusEpoch(blockTimestamp, parentBlockId)
       val blockInPrePreviousEpoch = storage.blockInfoById(lastBlockInPreviousEpoch).lastBlockInPreviousConsensusEpoch
-      blockInPrePreviousEpoch
+      consensusDataStorage.getStakeConsensusEpochInfo(blockIdToEpochId(blockInPrePreviousEpoch))
     }
   }
 

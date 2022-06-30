@@ -42,7 +42,7 @@ public class EthereumTransaction extends AccountTransaction<AddressProposition, 
 
     // creates a legacy transaction
     public EthereumTransaction(
-            @Nullable String to,
+            @NotNull String to,
             @NotNull BigInteger nonce,
             @NotNull BigInteger gasPrice,
             @NotNull BigInteger gasLimit,
@@ -52,15 +52,7 @@ public class EthereumTransaction extends AccountTransaction<AddressProposition, 
     ) {
         this(signature != null ?
                 new SignedRawTransaction(
-                        RawTransaction.createTransaction(
-                                nonce,
-                                gasPrice,
-                                gasLimit,
-                                to != null ? to : "",
-                                value != null ? value :
-                                        BigInteger.ZERO,
-                                data
-                        ).getTransaction(),
+                        RawTransaction.createTransaction(nonce, gasPrice, gasLimit, to, value, data).getTransaction(),
                         signature) :
                 RawTransaction.createTransaction(nonce, gasPrice, gasLimit, to, value, data)
         );
@@ -69,7 +61,7 @@ public class EthereumTransaction extends AccountTransaction<AddressProposition, 
     // creates an eip1559 transaction
     public EthereumTransaction(
             long chainId,
-            @Nullable String to,
+            @NotNull String to,
             @NotNull BigInteger nonce,
             @NotNull BigInteger gasLimit,
             @NotNull BigInteger maxPriorityFeePerGas,
@@ -81,10 +73,11 @@ public class EthereumTransaction extends AccountTransaction<AddressProposition, 
         this(
                 signature != null ?
                         new SignedRawTransaction(
-                                RawTransaction.createTransaction(chainId, nonce, gasLimit, to != null ? to : "", value != null ? value :
-                                        BigInteger.ZERO, data, maxPriorityFeePerGas, maxFeePerGas).getTransaction(), signature)
-                        : RawTransaction.createTransaction(chainId, nonce, gasLimit, to != null ? to : "", value != null ? value :
-                        BigInteger.ZERO, data, maxPriorityFeePerGas, maxFeePerGas)
+                                RawTransaction.createTransaction(chainId, nonce, gasLimit, to, value, data,
+                                        maxPriorityFeePerGas, maxFeePerGas).getTransaction(),
+                                signature)
+                        : RawTransaction.createTransaction(chainId, nonce, gasLimit, to, value, data,
+                        maxPriorityFeePerGas, maxFeePerGas)
         );
     }
 

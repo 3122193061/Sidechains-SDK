@@ -15,6 +15,9 @@ public interface NodeHistory
     @Override
     Optional<SidechainBlock> getBlockById(String blockId);
 
+    @Override
+    SidechainBlock getBestBlock();
+
     Optional<BoxTransaction<Proposition, Box<Proposition>>> searchTransactionInsideSidechainBlock(String transactionId, String blockId);
 
     Optional<BoxTransaction<Proposition, Box<Proposition>>> searchTransactionInsideBlockchain(String transactionId);

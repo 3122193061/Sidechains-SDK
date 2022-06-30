@@ -8,9 +8,6 @@ import (
 	"testing"
 )
 
-var nullHash = common.Hash{}
-var emptyHash = common.BytesToHash(crypto.Keccak256(nil))
-
 func checkValue(t *testing.T, expected []byte, actual []byte) {
 	if !bytes.Equal(expected, actual) {
 		t.Errorf(
@@ -238,16 +235,7 @@ func TestRawStateDB(t *testing.T) {
 	_, dbHandle := instance.OpenLevelDB(LevelDBParams{Path: t.TempDir()})
 	_, db := instance.databases.Get(dbHandle)
 	statedb, _ := state.New(common.Hash{}, db.database, nil)
-	initialCodeHash := statedb.GetCodeHash(addr)
-	if initialCodeHash != nullHash {
-		t.Errorf("code hash of non-existant account should be zero, got %v", initialCodeHash)
-	}
-	// set a non-empty value to the account to make sure it exists and is not "empty"
 	statedb.SetNonce(addr, 1)
-	emptyCodeHash := statedb.GetCodeHash(addr)
-	if emptyCodeHash != emptyHash {
-		t.Errorf("code hash of empty account should be hash of nil, got %v", emptyCodeHash)
-	}
 	revid := statedb.Snapshot()
 	statedb.SetState(addr, key, value)
 	retrievedValue := statedb.GetState(addr, key)
@@ -256,7 +244,8 @@ func TestRawStateDB(t *testing.T) {
 	}
 	statedb.RevertToSnapshot(revid)
 	revertedValue := statedb.GetState(addr, key)
-	if revertedValue != nullHash {
+	emptyHash := common.Hash{}
+	if revertedValue != emptyHash {
 		t.Error("snapshot rollback failed")
 	}
 	statedb.SetState(addr, key, value)

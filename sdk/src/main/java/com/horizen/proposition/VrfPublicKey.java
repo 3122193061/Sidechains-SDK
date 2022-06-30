@@ -22,9 +22,6 @@ public class VrfPublicKey implements ProofOfKnowledgeProposition<VrfSecretKey> {
     public VrfPublicKey(byte[] publicKey) {
         Objects.requireNonNull(publicKey, "Public key can't be null");
 
-        if(publicKey.length != KEY_LENGTH)
-            throw new IllegalArgumentException(String.format("Incorrect pubKey length, %d expected, %d found", KEY_LENGTH, publicKey.length));
-
         publicBytes = Arrays.copyOf(publicKey, publicKey.length);
     }
 

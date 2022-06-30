@@ -2,11 +2,13 @@ package com.horizen.examples;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
+
 import com.horizen.account.AccountSidechainApp;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.io.File;
+
 
 public class EvmApp {
     public static void main(String[] args) {
@@ -26,7 +28,7 @@ public class EvmApp {
 
         Logger logger = LogManager.getLogger(EvmApp.class);
         logger.info("...starting application...");
-
+        
         sidechainApp.run();
         System.out.println("Simple Sidechain application successfully started...");
     }

@@ -27,9 +27,6 @@ class AccountWallet private[horizen](seed: Array[Byte],
     this
   }
 
-  override def scanPersistent(modifier: AccountBlock): AccountWallet = {
-    this
-  }
 }
 
 object AccountWallet {
